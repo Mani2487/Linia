@@ -44,11 +44,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                 ),
-                const AppPrimaryTextField(
+                AppPrimaryTextField(
                   label: 'Username',
                 ),
                 verticalSpacer(verticalSpace: 34),
-                const AppPrimaryTextField(
+                AppPrimaryTextField(
                   label: 'Password',
                   isPassword: true,
                   controller: uNameController,

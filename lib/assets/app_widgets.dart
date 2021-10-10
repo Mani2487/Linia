@@ -37,9 +37,9 @@ class AppPrimaryButton extends StatelessWidget {
 class AppPrimaryTextField extends StatelessWidget {
   final String label;
   final bool isPassword;
-  final TextEditingController? controller;
+  TextEditingController? controller;
 
-  const AppPrimaryTextField({
+  AppPrimaryTextField({
     Key? key,
     this.label = '',
     this.isPassword = false,

@@ -30,11 +30,11 @@ class SignInScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const AppPrimaryTextField(
+                AppPrimaryTextField(
                   label: 'Username',
                 ),
                 verticalSpacer(verticalSpace: 34),
-                const AppPrimaryTextField(
+                AppPrimaryTextField(
                   label: 'Password',
                   isPassword: true,
                 ),
