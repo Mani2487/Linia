@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1035290195354:android:b2342fb53b54fdfe43f623",
+        "mobilesdk_app_id": "1:1035290195354:android:5d6c17c26b47557843f623",
         "android_client_info": {
-          "package_name": "com.example.linia"
+          "package_name": "com.sanjeev.linia"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1035290195354-hqcmreohccthj1un8ft5c395misasnr4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanjeev.linia",
+            "certificate_hash": "73c546ae72fd75415fddba60511692207e2765f8"
+          }
+        },
         {
           "client_id": "1035290195354-9lo9716dg0g0qr5ol4scfkvqmhv18ep4.apps.googleusercontent.com",
           "client_type": 3

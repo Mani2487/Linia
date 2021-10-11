@@ -5,13 +5,16 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: OutlinedButton(
-            child: const Text('Sign out'),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+    return const Scaffold(
+      // body: Center(
+      //   child: OutlinedButton(
+      //       child: const Text('Sign out'),
+      //       onPressed: () {
+      //         Navigator.pop(context);
+      //       }),
+      // ),
+      body: SafeArea(
+        child: Text('Good morning, Sanjeev'),
       ),
     );
   }

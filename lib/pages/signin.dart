@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:linia/assets/@assets.dart';
 import 'package:linia/pages/@pages.dart';
@@ -15,10 +16,42 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final currentState = MobileVerificationState.SHOW_MOBILE_FORM_STATE;
+  MobileVerificationState currentState =
+      MobileVerificationState.SHOW_MOBILE_FORM_STATE;
 
   final phoneController = TextEditingController();
   final otpController = TextEditingController();
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  late String verificationId;
+  bool isLoading = false;
+
+  void signInWithPhoneAuthCredential(
+      PhoneAuthCredential phoneAuthCredential) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final authCredential =
+          await _auth.signInWithCredential(phoneAuthCredential);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (authCredential.user != null) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const DashboardScreen()));
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.message.toString())));
+    }
+  }
 
   getMobileFormWidget(context) {
     return Column(
@@ -27,10 +60,36 @@ class _SignInScreenState extends State<SignInScreen> {
           label: 'Phone number',
           controller: phoneController,
         ),
-        verticalSpacer(verticalSpace: 34),
+        verticalSpacer(verticalSpace: 54),
         AppPrimaryButton(
           text: 'Send OTP',
-          onTap: () {},
+          onTap: () async {
+            setState(() {
+              isLoading = true;
+            });
+
+            await _auth.verifyPhoneNumber(
+              phoneNumber: "+91" + phoneController.text,
+              verificationCompleted: (phoneAuthCredential) async {
+                setState(() {
+                  isLoading = false;
+                });
+                // signInWithPhoneAuthCredential(phoneAuthCredential);
+              },
+              verificationFailed: (verificationFailed) async {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(verificationFailed.message.toString())));
+              },
+              codeSent: (verificationId, resendingToken) async {
+                setState(() {
+                  isLoading = false;
+                  currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
+                  this.verificationId = verificationId;
+                });
+              },
+              codeAutoRetrievalTimeout: (verificationId) async {},
+            );
+          },
         ),
       ],
     );
@@ -46,96 +105,61 @@ class _SignInScreenState extends State<SignInScreen> {
         verticalSpacer(verticalSpace: 34),
         AppPrimaryButton(
           text: 'Sign in',
-          onTap: () {},
+          onTap: () async {
+            PhoneAuthCredential phoneAuthCredential =
+                PhoneAuthProvider.credential(
+                    verificationId: verificationId,
+                    smsCode: otpController.text);
+            signInWithPhoneAuthCredential(phoneAuthCredential);
+          },
         ),
       ],
     );
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xffF2F2F7),
-      body: Container(
-        padding: const EdgeInsets.all(20.0),
-        child: currentState == MobileVerificationState.SHOW_MOBILE_FORM_STATE
-            ? getMobileFormWidget(context)
-            : getOtpFormWidget(context),
-      ),
-      // body: SafeArea(
+      // SafeArea(
       //   child: SingleChildScrollView(
       //     child: Container(
       //       padding: const EdgeInsets.all(20.0),
       //       child: Column(
       //         children: [
-      //           verticalSpacer(
-      //             verticalSpace: 57,
-      //             child: const Text(
-      //               'Sign in',
-      //               style: TextStyle(
-      //                 fontFamily: 'SFPro',
-      //                 letterSpacing: 1.3,
-      //                 fontSize: 28,
-      //                 fontWeight: FontWeight.bold,
-      //               ),
-      //             ),
-      //           ),
-      //           AppPrimaryTextField(
-      //             label: 'Username',
-      //           ),
-      //           verticalSpacer(verticalSpace: 34),
-      //           AppPrimaryTextField(
-      //             label: 'Password',
-      //             isPassword: true,
-      //           ),
-      //           verticalSpacer(verticalSpace: 34),
-      //           AppPrimaryButton(
-      //             text: 'Sign in',
-      //             onTap: () {
-      //               Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                     builder: (context) => const DashboardScreen()),
-      //               );
-      //             },
-      //           ),
-      //           verticalSpacer(verticalSpace: 34),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: [
-      //               const Text(
-      //                 'Don’t have an account, ',
-      //                 style: TextStyle(
-      //                   fontFamily: 'SFPro',
-      //                   fontSize: 16,
-      //                   color: Colors.black,
-      //                 ),
-      //               ),
-      //               InkWell(
-      //                 onTap: () {
-      //                   Navigator.push(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                         builder: (context) => const SignUpScreen()),
-      //                   );
-      //                 },
-      //                 splashColor: const Color(0x00FFFFFF),
-      //                 child: const Text(
-      //                   'Sign up',
-      //                   style: TextStyle(
-      //                     fontFamily: 'SFPro',
-      //                     fontSize: 16,
-      //                     color: Color(0xff5D5FEF),
-      //                   ),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      //
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    verticalSpacer(
+                      verticalSpace: 157,
+                      child: const Text(
+                        'Sign in',
+                        style: TextStyle(
+                          fontFamily: 'SFPro',
+                          letterSpacing: 1.3,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(20.0),
+                      child: currentState ==
+                              MobileVerificationState.SHOW_MOBILE_FORM_STATE
+                          ? getMobileFormWidget(context)
+                          : getOtpFormWidget(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 
@@ -146,3 +170,80 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
+
+// Old scaffold
+//
+// body: SafeArea(
+//   child: SingleChildScrollView(
+//     child: Container(
+//       padding: const EdgeInsets.all(20.0),
+//       child: Column(
+//         children: [
+//           verticalSpacer(
+//             verticalSpace: 57,
+//             child: const Text(
+//               'Sign in',
+//               style: TextStyle(
+//                 fontFamily: 'SFPro',
+//                 letterSpacing: 1.3,
+//                 fontSize: 28,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           ),
+//           AppPrimaryTextField(
+//             label: 'Username',
+//           ),
+//           verticalSpacer(verticalSpace: 34),
+//           AppPrimaryTextField(
+//             label: 'Password',
+//             isPassword: true,
+//           ),
+//           verticalSpacer(verticalSpace: 34),
+//           AppPrimaryButton(
+//             text: 'Sign in',
+//             onTap: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                     builder: (context) => const DashboardScreen()),
+//               );
+//             },
+//           ),
+//           verticalSpacer(verticalSpace: 34),
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               const Text(
+//                 'Don’t have an account, ',
+//                 style: TextStyle(
+//                   fontFamily: 'SFPro',
+//                   fontSize: 16,
+//                   color: Colors.black,
+//                 ),
+//               ),
+//               InkWell(
+//                 onTap: () {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                         builder: (context) => const SignUpScreen()),
+//                   );
+//                 },
+//                 splashColor: const Color(0x00FFFFFF),
+//                 child: const Text(
+//                   'Sign up',
+//                   style: TextStyle(
+//                     fontFamily: 'SFPro',
+//                     fontSize: 16,
+//                     color: Color(0xff5D5FEF),
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     ),
+//   ),
+// ),
