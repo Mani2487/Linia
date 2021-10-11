@@ -42,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
       if (authCredential.user != null) {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()));
+            MaterialPageRoute(builder: (context) => DashboardScreen()));
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -57,6 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Column(
       children: [
         AppPrimaryTextField(
+          maxLength: 10,
           label: 'Phone number',
           controller: phoneController,
         ),
@@ -100,6 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
       children: [
         AppPrimaryTextField(
           label: 'Enter OTP',
+          maxLength: 6,
           controller: otpController,
         ),
         verticalSpacer(verticalSpace: 34),
