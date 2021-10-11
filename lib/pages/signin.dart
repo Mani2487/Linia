@@ -18,6 +18,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   MobileVerificationState currentState =
       MobileVerificationState.SHOW_MOBILE_FORM_STATE;
+  // MobileVerificationState.SHOW_OTP_FORM_STATE;
 
   final phoneController = TextEditingController();
   final otpController = TextEditingController();
@@ -104,7 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
           maxLength: 6,
           controller: otpController,
         ),
-        verticalSpacer(verticalSpace: 34),
+        verticalSpacer(verticalSpace: 54),
         AppPrimaryButton(
           text: 'Sign in',
           onTap: () async {
