@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+
 import 'package:linia/assets/@assets.dart';
-import 'package:linia/pages/dashboard.dart';
+import 'package:linia/pages/@pages.dart';
 
 import './@pages.dart';
 
