@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'Línia',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: const Color(0xffF2F2F7),
       ),
       home: OnboardingScreen(),
     );

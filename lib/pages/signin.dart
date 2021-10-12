@@ -49,8 +49,10 @@ class _SignInScreenState extends State<SignInScreen> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.message.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+        e.message.toString(),
+      )));
     }
   }
 
