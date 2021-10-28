@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">1035290195354-9lo9716dg0g0qr5ol4scfkvqmhv18ep4.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">1035290195354</string>
+    <string name="google_api_key" translatable="false">AIzaSyBcdPvMoFHw6QfcNtVJvnvuo0hfWWQn0Bc</string>
+    <string name="google_app_id" translatable="false">1:1035290195354:android:5d6c17c26b47557843f623</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBcdPvMoFHw6QfcNtVJvnvuo0hfWWQn0Bc</string>
+    <string name="google_storage_bucket" translatable="false">linia-academic-project.appspot.com</string>
+    <string name="project_id" translatable="false">linia-academic-project</string>
+</resources>
