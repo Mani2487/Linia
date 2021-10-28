@@ -129,13 +129,6 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: const Color(0xffF2F2F7),
-      // SafeArea(
-      //   child: SingleChildScrollView(
-      //     child: Container(
-      //       padding: const EdgeInsets.all(20.0),
-      //       child: Column(
-      //         children: [
-      //
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -175,80 +168,3 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
-
-// Old scaffold
-//
-// body: SafeArea(
-//   child: SingleChildScrollView(
-//     child: Container(
-//       padding: const EdgeInsets.all(20.0),
-//       child: Column(
-//         children: [
-//           verticalSpacer(
-//             verticalSpace: 57,
-//             child: const Text(
-//               'Sign in',
-//               style: TextStyle(
-//                 fontFamily: 'SFPro',
-//                 letterSpacing: 1.3,
-//                 fontSize: 28,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//           ),
-//           AppPrimaryTextField(
-//             label: 'Username',
-//           ),
-//           verticalSpacer(verticalSpace: 34),
-//           AppPrimaryTextField(
-//             label: 'Password',
-//             isPassword: true,
-//           ),
-//           verticalSpacer(verticalSpace: 34),
-//           AppPrimaryButton(
-//             text: 'Sign in',
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                     builder: (context) => const DashboardScreen()),
-//               );
-//             },
-//           ),
-//           verticalSpacer(verticalSpace: 34),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               const Text(
-//                 'Don’t have an account, ',
-//                 style: TextStyle(
-//                   fontFamily: 'SFPro',
-//                   fontSize: 16,
-//                   color: Colors.black,
-//                 ),
-//               ),
-//               InkWell(
-//                 onTap: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                         builder: (context) => const SignUpScreen()),
-//                   );
-//                 },
-//                 splashColor: const Color(0x00FFFFFF),
-//                 child: const Text(
-//                   'Sign up',
-//                   style: TextStyle(
-//                     fontFamily: 'SFPro',
-//                     fontSize: 16,
-//                     color: Color(0xff5D5FEF),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     ),
-//   ),
-// ),
